@@ -1,1 +1,171 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akiras.xyz - Générateur QR, Memes & Citations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .tool-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        
+        .tool-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .tool-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .tool-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .tool-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tool-card {
+                padding: 30px 20px;
+            }
+            
+            .tool-icon {
+                font-size: 3rem;
+            }
+            
+            .tool-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Akiras.xyz</h1>
+        <p class="subtitle">Créez facilement vos QR codes, memes et citations</p>
+        
+        <div class="tools-grid">
+            <a href="/qrcode" class="tool-card">
+                <span class="tool-icon">📱</span>
+                <h3 class="tool-title">QR Code</h3>
+                <p class="tool-description">Générez des QR codes personnalisés pour vos liens, textes et plus encore</p>
+            </a>
+            
+            <a href="/memes" class="tool-card">
+                <span class="tool-icon">😂</span>
+                <h3 class="tool-title">Memes</h3>
+                <p class="tool-description">Créez des memes hilarants avec vos images et textes personnalisés</p>
+            </a>
+            
+            <a href="/citations" class="tool-card">
+                <span class="tool-icon">💭</span>
+                <h3 class="tool-title">Citations</h3>
+                <p class="tool-description">Concevez de belles citations inspirantes avec des designs élégants</p>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>Fait avec ❤️ pour la créativité</p>
+        </div>
+    </div>
+</body>
+</html>
