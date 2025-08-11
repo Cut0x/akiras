@@ -1,7 +1,17 @@
 {
   "rewrites": [
-    { "source": "/qrcode", "destination": "/pages/qrcode.html" },
-    { "source": "/memes", "destination": "/pages/memes.html" },
-    { "source": "/citations", "destination": "/pages/citations.html" }
-  ]
+    {
+      "source": "/qrcode",
+      "destination": "/pages/qrcode.html"
+    },
+    {
+      "source": "/memes",
+      "destination": "/pages/memes.html"
+    },
+    {
+      "source": "/citations",
+      "destination": "/pages/citations.html"
+    }
+  ],
+  "errorPage": "404.html"
 }
