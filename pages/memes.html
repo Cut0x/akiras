@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Memes - Akiras.xyz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,295 +12,574 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --card-bg: #21262d;
+            --border-color: #30363d;
+            --accent-color: #58a6ff;
+            --accent-hover: #1f6feb;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --success: #238636;
+            --warning: #da8b00;
+            --danger: #da3633;
+            --gradient: linear-gradient(135deg, #58a6ff 0%, #1f6feb 50%, #8b5cf6 100%);
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
+        }
+        
+        .navbar {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
         }
         
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
+            margin-bottom: 3rem;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
         
-        .back-btn {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
         
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .meme-creator {
+        .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 3rem;
             align-items: start;
         }
         
-        .controls-section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
+        .form-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
         }
         
-        .preview-section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
         
-        label {
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
         }
         
-        input, select, textarea {
+        .form-control {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e1e1;
+            padding: 0.75rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
         
-        input:focus, select:focus, textarea:focus {
+        .form-control:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
         }
         
-        .image-options {
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        textarea.form-control {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .templates-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
         
-        .template-img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
+        .template-card {
+            background: var(--secondary-bg);
+            border: 2px solid var(--border-color);
             border-radius: 8px;
+            padding: 1rem;
             cursor: pointer;
-            border: 3px solid transparent;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            text-align: center;
         }
         
-        .template-img.selected {
-            border-color: #667eea;
+        .template-card:hover {
+            border-color: var(--accent-color);
+            background: rgba(88, 166, 255, 0.1);
         }
         
-        .file-input {
-            margin-top: 10px;
+        .template-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(88, 166, 255, 0.1);
         }
         
-        .text-controls {
+        .template-preview {
+            width: 100%;
+            height: 60px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-align: center;
+        }
+        
+        .template-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        
+        .file-upload input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--secondary-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover .file-upload-label {
+            border-color: var(--accent-color);
+            background: rgba(88, 166, 255, 0.1);
+        }
+        
+        .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 1rem;
         }
         
         .color-input {
             width: 60px !important;
             height: 40px;
-            padding: 2px;
+            padding: 4px;
             border-radius: 8px;
-        }
-        
-        .generate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
         }
         
-        .generate-btn:hover {
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1a7f37;
+            transform: translateY(-2px);
+        }
+        
+        .preview-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: sticky;
+            top: 6rem;
+        }
+        
+        .meme-preview {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .meme-placeholder {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .meme-placeholder i {
+            font-size: 3rem;
+            opacity: 0.5;
         }
         
         #memeCanvas {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            margin: 20px 0;
-        }
-        
-        .download-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 25px;
             border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            margin: 10px;
-            transition: background 0.3s ease;
         }
         
-        .download-btn:hover {
-            background: #218838;
+        .download-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .alert {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .preview-section {
+                position: static;
+            }
         }
         
         @media (max-width: 768px) {
-            .meme-creator {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .controls-grid {
                 grid-template-columns: 1fr;
             }
             
-            .text-controls {
-                grid-template-columns: 1fr;
+            .templates-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .download-actions {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-btn">← Retour à l'accueil</a>
-        
-        <div class="header">
-            <h1>😂 Générateur de Memes</h1>
-            <p>Créez des memes hilarants en quelques clics</p>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Akiras.xyz</a>
+            <a href="/" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Retour à l'accueil
+            </a>
         </div>
-        
-        <div class="meme-creator">
-            <div class="controls-section">
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="bi bi-emoji-laughing"></i>
+                Générateur de Memes
+            </h1>
+            <p>Créez des memes viraux en quelques clics</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="bi bi-gear"></i>
+                    Configuration
+                </h2>
+
                 <div class="form-group">
-                    <label>Choisir une image :</label>
-                    <div class="image-options">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EDrake%3C/text%3E%3C/svg%3E" alt="Drake Meme" class="template-img" onclick="selectTemplate(this, 'drake')">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EDistracted%3C/text%3E%3C/svg%3E" alt="Distracted Boyfriend" class="template-img" onclick="selectTemplate(this, 'distracted')">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EWoman%3C/text%3E%3C/svg%3E" alt="Woman Yelling at Cat" class="template-img" onclick="selectTemplate(this, 'woman')">
+                    <label class="form-label">Choisir un template</label>
+                    <div class="templates-grid">
+                        <div class="template-card selected" onclick="selectTemplate(this, 'drake')">
+                            <div class="template-preview">Drake</div>
+                            <div class="template-name">Drake</div>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate(this, 'distracted')">
+                            <div class="template-preview">Distracted</div>
+                            <div class="template-name">Distracted BF</div>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate(this, 'woman')">
+                            <div class="template-preview">Woman Cat</div>
+                            <div class="template-name">Woman & Cat</div>
+                        </div>
+                        <div class="template-card" onclick="selectTemplate(this, 'thinking')">
+                            <div class="template-preview">Thinking</div>
+                            <div class="template-name">Thinking</div>
+                        </div>
                     </div>
-                    <input type="file" id="imageUpload" accept="image/*" class="file-input" onchange="loadCustomImage(event)">
+                    
+                    <div class="file-upload">
+                        <input type="file" id="imageUpload" accept="image/*" onchange="loadCustomImage(event)">
+                        <label for="imageUpload" class="file-upload-label">
+                            <i class="bi bi-cloud-upload"></i>
+                            Ou uploadez votre image
+                        </label>
+                    </div>
                 </div>
-                
+
+                <div class="alert">
+                    <i class="bi bi-lightbulb"></i>
+                    Les textes sont automatiquement formatés en majuscules pour un style meme authentique
+                </div>
+
                 <div class="form-group">
-                    <label for="topText">Texte du haut :</label>
-                    <textarea id="topText" placeholder="Entrez votre texte ici..." rows="2"></textarea>
+                    <label for="topText" class="form-label">Texte du haut</label>
+                    <textarea id="topText" class="form-control" placeholder="Entrez votre texte..." rows="2"></textarea>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="bottomText">Texte du bas :</label>
-                    <textarea id="bottomText" placeholder="Entrez votre texte ici..." rows="2"></textarea>
+                    <label for="bottomText" class="form-label">Texte du bas</label>
+                    <textarea id="bottomText" class="form-control" placeholder="Entrez votre texte..." rows="2"></textarea>
                 </div>
-                
-                <div class="text-controls">
+
+                <div class="controls-grid">
                     <div class="form-group">
-                        <label for="fontSize">Taille du texte :</label>
-                        <select id="fontSize">
-                            <option value="30">Petit</option>
-                            <option value="40" selected>Moyen</option>
-                            <option value="50">Grand</option>
-                            <option value="60">Très grand</option>
+                        <label for="fontSize" class="form-label">Taille du texte</label>
+                        <select id="fontSize" class="form-control">
+                            <option value="24">Petit</option>
+                            <option value="32">Moyen</option>
+                            <option value="40" selected>Grand</option>
+                            <option value="48">Très grand</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="textColor">Couleur du texte :</label>
-                        <input type="color" id="textColor" value="#ffffff" class="color-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="outlineColor">Contour du texte :</label>
-                        <input type="color" id="outlineColor" value="#000000" class="color-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="fontFamily">Police :</label>
-                        <select id="fontFamily">
-                            <option value="Impact">Impact</option>
+                        <label for="fontFamily" class="form-label">Police</label>
+                        <select id="fontFamily" class="form-control">
+                            <option value="Impact" selected>Impact</option>
                             <option value="Arial Black">Arial Black</option>
                             <option value="Comic Sans MS">Comic Sans MS</option>
                             <option value="Helvetica">Helvetica</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="textColor" class="form-label">Couleur du texte</label>
+                        <input type="color" id="textColor" value="#ffffff" class="form-control color-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="outlineColor" class="form-label">Couleur du contour</label>
+                        <input type="color" id="outlineColor" value="#000000" class="form-control color-input">
+                    </div>
                 </div>
-                
-                <button class="generate-btn" onclick="generateMeme()">Créer le Meme</button>
+
+                <button class="btn btn-primary" onclick="generateMeme()">
+                    <i class="bi bi-magic"></i>
+                    Créer le Meme
+                </button>
             </div>
-            
+
             <div class="preview-section">
-                <h3>Aperçu :</h3>
-                <canvas id="memeCanvas" width="500" height="500"></canvas>
-                <div>
-                    <button class="download-btn" onclick="downloadMeme()">Télécharger</button>
+                <h2 class="section-title">
+                    <i class="bi bi-eye"></i>
+                    Aperçu
+                </h2>
+
+                <div class="meme-preview" id="memePreview">
+                    <div class="meme-placeholder">
+                        <i class="bi bi-image"></i>
+                        <span>Votre meme apparaîtra ici</span>
+                    </div>
+                </div>
+
+                <div id="downloadActions" class="download-actions" style="display: none;">
+                    <button class="btn btn-success" onclick="downloadMeme()">
+                        <i class="bi bi-download"></i>
+                        Télécharger
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         let currentImage = null;
-        let selectedTemplate = null;
+        let selectedTemplate = 'drake';
         
-        // Templates prédéfinis (URLs d'exemple - vous pouvez les remplacer par de vraies images)
         const templates = {
-            drake: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500"%3E%3Crect width="500" height="250" fill="%23f0f0f0"/%3E%3Crect y="250" width="500" height="250" fill="%23e0e0e0"/%3E%3Ctext x="250" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23666"%3EDrake Template - Zone 1%3C/text%3E%3Ctext x="250" y="375" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23666"%3EDrake Template - Zone 2%3C/text%3E%3C/svg%3E',
-            distracted: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23d0d0d0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="24" fill="%23555"%3EDistracted Boyfriend Template%3C/text%3E%3C/svg%3E',
-            woman: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23c0c0c0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23444"%3EWoman Yelling at Cat Template%3C/text%3E%3C/svg%3E'
+            drake: {
+                url: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500"%3E%3Crect width="500" height="250" fill="%23f8f8f8"/%3E%3Crect y="250" width="500" height="250" fill="%23e8e8e8"/%3E%3Ctext x="250" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="16" fill="%23666"%3EDrake rejette%3C/text%3E%3Ctext x="250" y="375" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="16" fill="%23666"%3EDrake approuve%3C/text%3E%3C/svg%3E',
+                zones: [{x: 0, y: 0, w: 500, h: 250}, {x: 0, y: 250, w: 500, h: 250}]
+            },
+            distracted: {
+                url: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23e0e0e0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18" fill="%23555"%3EDistracted Boyfriend%3C/text%3E%3C/svg%3E',
+                zones: [{x: 0, y: 0, w: 500, h: 200}, {x: 0, y: 200, w: 500, h: 200}]
+            },
+            woman: {
+                url: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23d0d0d0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="16" fill="%23444"%3EWoman Yelling at Cat%3C/text%3E%3C/svg%3E',
+                zones: [{x: 0, y: 0, w: 500, h: 200}, {x: 0, y: 200, w: 500, h: 200}]
+            },
+            thinking: {
+                url: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23f0f0f0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="18" fill="%23666"%3EThinking Meme%3C/text%3E%3C/svg%3E',
+                zones: [{x: 0, y: 0, w: 500, h: 200}, {x: 0, y: 200, w: 500, h: 200}]
+            }
         };
         
-        function selectTemplate(img, templateName) {
-            // Supprimer la sélection précédente
-            document.querySelectorAll('.template-img').forEach(el => el.classList.remove('selected'));
-            
-            // Sélectionner le nouveau template
-            img.classList.add('selected');
+        function selectTemplate(element, templateName) {
+            document.querySelectorAll('.template-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
             selectedTemplate = templateName;
             
-            // Charger l'image
             const image = new Image();
             image.crossOrigin = 'anonymous';
             image.onload = function() {
                 currentImage = image;
                 generateMeme();
             };
-            image.src = templates[templateName];
+            image.src = templates[templateName].url;
         }
         
         function loadCustomImage(event) {
             const file = event.target.files[0];
             if (file) {
-                // Désélectionner les templates
-                document.querySelectorAll('.template-img').forEach(el => el.classList.remove('selected'));
+                document.querySelectorAll('.template-card').forEach(card => card.classList.remove('selected'));
                 selectedTemplate = null;
                 
                 const reader = new FileReader();
@@ -317,14 +597,18 @@
         
         function generateMeme() {
             if (!currentImage) {
-                alert('Veuillez sélectionner une image');
                 return;
             }
             
-            const canvas = document.getElementById('memeCanvas');
+            const canvas = document.getElementById('memeCanvas') || document.createElement('canvas');
+            if (!document.getElementById('memeCanvas')) {
+                canvas.id = 'memeCanvas';
+                document.getElementById('memePreview').innerHTML = '';
+                document.getElementById('memePreview').appendChild(canvas);
+            }
+            
             const ctx = canvas.getContext('2d');
             
-            // Ajuster la taille du canvas à l'image
             const maxWidth = 500;
             const maxHeight = 500;
             let { width, height } = currentImage;
@@ -341,10 +625,8 @@
             canvas.width = width;
             canvas.height = height;
             
-            // Dessiner l'image
             ctx.drawImage(currentImage, 0, 0, width, height);
             
-            // Configuration du texte
             const fontSize = parseInt(document.getElementById('fontSize').value);
             const textColor = document.getElementById('textColor').value;
             const outlineColor = document.getElementById('outlineColor').value;
@@ -353,23 +635,24 @@
             ctx.font = `bold ${fontSize}px ${fontFamily}`;
             ctx.fillStyle = textColor;
             ctx.strokeStyle = outlineColor;
-            ctx.lineWidth = 3;
+            ctx.lineWidth = Math.max(2, fontSize / 20);
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
             
-            // Dessiner le texte du haut
             const topText = document.getElementById('topText').value.toUpperCase();
+            const bottomText = document.getElementById('bottomText').value.toUpperCase();
+            
             if (topText) {
                 drawTextWithWrap(ctx, topText, width / 2, 10, width - 20, fontSize);
             }
             
-            // Dessiner le texte du bas
-            const bottomText = document.getElementById('bottomText').value.toUpperCase();
             if (bottomText) {
                 ctx.textBaseline = 'bottom';
                 const bottomY = height - 10;
                 drawTextWithWrap(ctx, bottomText, width / 2, bottomY, width - 20, fontSize, true);
             }
+            
+            document.getElementById('downloadActions').style.display = 'flex';
         }
         
         function drawTextWithWrap(ctx, text, x, y, maxWidth, lineHeight, fromBottom = false) {
@@ -404,15 +687,27 @@
         
         function downloadMeme() {
             const canvas = document.getElementById('memeCanvas');
+            if (!canvas) {
+                alert('Veuillez d\'abord créer un meme');
+                return;
+            }
+            
             const link = document.createElement('a');
             link.download = 'meme.png';
             link.href = canvas.toDataURL();
             link.click();
         }
         
-        // Charger le premier template par défaut
+        // Auto-generate when text changes
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('#topText, #bottomText') && currentImage) {
+                generateMeme();
+            }
+        });
+        
+        // Initialize with first template
         window.onload = function() {
-            const firstTemplate = document.querySelector('.template-img');
+            const firstTemplate = document.querySelector('.template-card');
             selectTemplate(firstTemplate, 'drake');
         };
     </script>
