@@ -4,6 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akiras.xyz - Générateur QR, Memes & Citations</title>
+    <meta name="description" content="Suite d'outils créatifs gratuits pour générer des QR codes personnalisés, créer des memes viraux et concevoir des citations inspirantes. Interface moderne et responsive.">
+    <meta name="keywords" content="QR code, générateur QR, memes, citations, outils créatifs, gratuit, responsive">
+    <meta name="author" content="Akiras.xyz">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://akiras.xyz/">
+    <meta property="og:title" content="Akiras.xyz - Outils Créatifs Gratuits">
+    <meta property="og:description" content="Créez des QR codes, memes et citations avec nos outils gratuits et modernes">
+    <meta property="og:image" content="https://akiras.xyz/og-image.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://akiras.xyz/">
+    <meta property="twitter:title" content="Akiras.xyz - Outils Créatifs Gratuits">
+    <meta property="twitter:description" content="Créez des QR codes, memes et citations avec nos outils gratuits et modernes">
+    <meta property="twitter:image" content="https://akiras.xyz/og-image.png">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#58a6ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Akiras">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0idXJsKCNncmFkaWVudDApIi8+CjxwYXRoIGQ9Ik0xNiA4QzIwLjQxODMgOCAyNCA5LjU4MTcgMjQgMTZDMjQgMjAuNDE4MyAyMC40MTgzIDI0IDE2IDI0QzExLjU4MTcgMjQgOCAyMC40MTgzIDggMTZDOCAxMS41ODE3IDExLjU4MTcgOCAxNiA4WiIgZmlsbD0id2hpdGUiLz4KPGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQwIiB4MT0iMCIgeTE9IjAiIHgyPSIzMiIgeTI9IjMyIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiM1OGE2ZmYiLz4KPHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiMxZjZmZWIiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOGI1Y2Y2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         * {
@@ -462,5 +491,101 @@
             <p>&copy; 2025 Akiras.xyz - Fait avec passion pour la créativité</p>
         </div>
     </footer>
+
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW enregistré: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('Échec enregistrement SW: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Créer un bouton d'installation subtil
+            const installButton = document.createElement('button');
+            installButton.textContent = 'Installer l\'app';
+            installButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--gradient);
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 50px;
+                font-weight: 600;
+                box-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
+                cursor: pointer;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            `;
+            
+            installButton.addEventListener('mouseenter', () => {
+                installButton.style.transform = 'translateY(-2px)';
+            });
+            
+            installButton.addEventListener('mouseleave', () => {
+                installButton.style.transform = 'translateY(0)';
+            });
+            
+            installButton.addEventListener('click', () => {
+                installButton.style.display = 'none';
+                deferredPrompt.prompt();
+                
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('Utilisateur a accepté l\'installation');
+                    } else {
+                        console.log('Utilisateur a refusé l\'installation');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+            
+            document.body.appendChild(installButton);
+            
+            // Masquer le bouton après 10 secondes si pas de clic
+            setTimeout(() => {
+                if (installButton.parentNode) {
+                    installButton.style.opacity = '0.7';
+                }
+            }, 10000);
+        });
+
+        // Analytics et tracking basique
+        window.addEventListener('load', () => {
+            // Track page view
+            console.log('Page vue: Accueil');
+            
+            // Track feature usage
+            document.querySelectorAll('.tool-card').forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    const toolName = card.querySelector('.tool-title').textContent;
+                    console.log(`Outil cliqué: ${toolName}`);
+                });
+            });
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if ('performance' in window) {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                const loadTime = navigation.loadEventEnd - navigation.loadEventStart;
+                console.log(`Temps de chargement: ${loadTime}ms`);
+            }
+        });
+    </script>
 </body>
 </html>
