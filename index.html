@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Akiras.xyz - Générateur QR, Memes & Citations</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,161 +12,455 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --card-bg: #21262d;
+            --border-color: #30363d;
+            --accent-color: #58a6ff;
+            --accent-hover: #1f6feb;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --success: #238636;
+            --warning: #da8b00;
+            --danger: #da3633;
+            --gradient: linear-gradient(135deg, #58a6ff 0%, #1f6feb 50%, #8b5cf6 100%);
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
         }
         
-        .container {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        .hero {
+            padding: 6rem 2rem;
             text-align: center;
-            color: white;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+        }
+        
+        .hero-content {
             max-width: 800px;
-            padding: 40px 20px;
+            margin: 0 auto;
         }
         
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s ease-out;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
         }
         
-        .subtitle {
-            font-size: 1.4rem;
-            margin-bottom: 50px;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.2s both;
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .tools-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
         
         .tool-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
             text-decoration: none;
-            color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 1s ease-out 0.4s both;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
         
-        .tool-card:nth-child(2) {
-            animation-delay: 0.6s;
-        }
-        
-        .tool-card:nth-child(3) {
-            animation-delay: 0.8s;
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
         }
         
         .tool-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tool-card:hover::before {
+            transform: scaleX(1);
         }
         
         .tool-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
+            width: 64px;
+            height: 64px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: white;
         }
         
         .tool-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
         }
         
         .tool-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .features {
+            background: var(--secondary-bg);
+            padding: 6rem 2rem;
+        }
+        
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .features h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .features p {
             font-size: 1.1rem;
-            opacity: 0.9;
-            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-item {
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(88, 166, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--accent-color);
+            font-size: 1.25rem;
+        }
+        
+        .feature-item h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .feature-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
         }
         
         .footer {
-            margin-top: 60px;
-            opacity: 0.7;
-            font-size: 0.9rem;
-            animation: fadeInUp 1s ease-out 1s both;
+            background: var(--primary-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
         }
         
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            .nav-container {
+                padding: 0 1rem;
             }
             
-            .subtitle {
-                font-size: 1.2rem;
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 4rem 1rem;
             }
             
             .tools-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                padding: 0 1rem 4rem;
             }
             
             .tool-card {
-                padding: 30px 20px;
+                padding: 2rem;
             }
             
-            .tool-icon {
-                font-size: 3rem;
+            .features {
+                padding: 4rem 1rem;
             }
             
-            .tool-title {
-                font-size: 1.5rem;
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tool-card {
+                padding: 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 Akiras.xyz</h1>
-        <p class="subtitle">Créez facilement vos QR codes, memes et citations</p>
-        
-        <div class="tools-grid">
-            <a href="/qrcode" class="tool-card">
-                <span class="tool-icon">📱</span>
-                <h3 class="tool-title">QR Code</h3>
-                <p class="tool-description">Générez des QR codes personnalisés pour vos liens, textes et plus encore</p>
-            </a>
-            
-            <a href="/memes" class="tool-card">
-                <span class="tool-icon">😂</span>
-                <h3 class="tool-title">Memes</h3>
-                <p class="tool-description">Créez des memes hilarants avec vos images et textes personnalisés</p>
-            </a>
-            
-            <a href="/citations" class="tool-card">
-                <span class="tool-icon">💭</span>
-                <h3 class="tool-title">Citations</h3>
-                <p class="tool-description">Concevez de belles citations inspirantes avec des designs élégants</p>
-            </a>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Akiras.xyz</a>
+            <ul class="nav-links">
+                <li><a href="/qrcode">QR Code</a></li>
+                <li><a href="/memes">Memes</a></li>
+                <li><a href="/citations">Citations</a></li>
+            </ul>
         </div>
-        
-        <div class="footer">
-            <p>Fait avec ❤️ pour la créativité</p>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Créez, Partagez, Inspirez</h1>
+            <p>Une suite d'outils créatifs pour générer des QR codes, créer des memes viraux et concevoir des citations inspirantes. Tout en un seul endroit.</p>
         </div>
-    </div>
+    </section>
+
+    <section class="tools-grid">
+        <a href="/qrcode" class="tool-card">
+            <div class="tool-icon">
+                <i class="bi bi-qr-code"></i>
+            </div>
+            <h3 class="tool-title">Générateur QR Code</h3>
+            <p class="tool-description">Créez des QR codes personnalisés pour vos liens, textes, contacts et réseaux WiFi. Support de multiples formats avec options de personnalisation avancées.</p>
+        </a>
+        
+        <a href="/memes" class="tool-card">
+            <div class="tool-icon">
+                <i class="bi bi-emoji-laughing"></i>
+            </div>
+            <h3 class="tool-title">Créateur de Memes</h3>
+            <p class="tool-description">Transformez vos idées en memes viraux avec nos templates populaires ou uploadez vos propres images. Éditeur de texte avancé inclus.</p>
+        </a>
+        
+        <a href="/citations" class="tool-card">
+            <div class="tool-icon">
+                <i class="bi bi-chat-quote"></i>
+            </div>
+            <h3 class="tool-title">Designer de Citations</h3>
+            <p class="tool-description">Concevez de magnifiques citations avec des arrière-plans élégants, des typographies variées et des styles personnalisables pour vos réseaux sociaux.</p>
+        </a>
+    </section>
+
+    <section class="features">
+        <div class="features-container">
+            <h2>Pourquoi choisir Akiras.xyz ?</h2>
+            <p>Des outils puissants et gratuits pour libérer votre créativité</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3>Rapide & Efficace</h3>
+                    <p>Créez vos contenus en quelques clics avec des outils optimisés</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-palette"></i>
+                    </div>
+                    <h3>Personnalisation Totale</h3>
+                    <p>Contrôlez chaque aspect de vos créations avec des options avancées</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-download"></i>
+                    </div>
+                    <h3>Export Haute Qualité</h3>
+                    <p>Téléchargez vos créations en PNG, SVG et autres formats professionnels</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-phone"></i>
+                    </div>
+                    <h3>100% Responsive</h3>
+                    <p>Utilisez nos outils sur tous vos appareils, partout et à tout moment</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3>Sécurisé & Privé</h3>
+                    <p>Vos données restent privées, aucun tracking ni stockage non désiré</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-heart"></i>
+                    </div>
+                    <h3>Entièrement Gratuit</h3>
+                    <p>Accès illimité à tous nos outils sans frais cachés</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <i class="bi bi-github"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="bi bi-twitter"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="bi bi-discord"></i>
+                </a>
+            </div>
+            <p>&copy; 2025 Akiras.xyz - Fait avec passion pour la créativité</p>
+        </div>
+    </footer>
 </body>
 </html>
