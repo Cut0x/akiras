@@ -13,5 +13,5 @@
       "destination": "/pages/citations.html"
     }
   ],
-  "errorPage": "404.html"
+  "errorPage": "/pages/error/404.html"
 }
