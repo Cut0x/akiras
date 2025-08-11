@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Citations - Akiras.xyz</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,283 +12,492 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --card-bg: #21262d;
+            --border-color: #30363d;
+            --accent-color: #58a6ff;
+            --accent-hover: #1f6feb;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --success: #238636;
+            --warning: #da8b00;
+            --danger: #da3633;
+            --gradient: linear-gradient(135deg, #58a6ff 0%, #1f6feb 50%, #8b5cf6 100%);
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
+        }
+        
+        .navbar {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
         }
         
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 40px;
+            margin-bottom: 3rem;
         }
         
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
         
-        .back-btn {
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
         
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .quote-creator {
+        .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 3rem;
             align-items: start;
         }
         
-        .controls-section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
+        .form-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
         }
         
-        .preview-section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
         
-        label {
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        input, select, textarea {
+        .form-control {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e1e1;
+            padding: 0.75rem 1rem;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-        
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        
-        .random-btn {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-        
-        .random-btn:hover {
-            background: #138496;
-        }
-        
-        .style-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .style-option {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px 10px;
-            cursor: pointer;
-            text-align: center;
+            color: var(--text-primary);
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            font-size: 12px;
         }
         
-        .style-option.selected {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
         }
         
-        .style-option:hover {
-            background: rgba(102, 126, 234, 0.1);
+        .form-control::placeholder {
+            color: var(--text-muted);
         }
         
-        .color-controls {
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+            font-family: Georgia, serif;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+        }
+        
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .style-card {
+            background: var(--secondary-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .style-card:hover {
+            border-color: var(--accent-color);
+            background: rgba(88, 166, 255, 0.1);
+        }
+        
+        .style-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(88, 166, 255, 0.1);
+        }
+        
+        .style-preview {
+            width: 100%;
+            height: 40px;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .style-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 1rem;
         }
         
         .color-input {
             width: 60px !important;
             height: 40px;
-            padding: 2px;
+            padding: 4px;
             border-radius: 8px;
-        }
-        
-        .size-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .generate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            width: 100%;
-            margin-top: 20px;
         }
         
-        .generate-btn:hover {
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1a7f37;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        
+        .preview-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: sticky;
+            top: 6rem;
+        }
+        
+        .quote-preview {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quote-placeholder {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .quote-placeholder i {
+            font-size: 3rem;
+            opacity: 0.5;
         }
         
         #quoteCanvas {
             max-width: 100%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            margin: 20px 0;
-        }
-        
-        .download-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 25px;
             border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            margin: 10px;
-            transition: background 0.3s ease;
         }
         
-        .download-btn:hover {
-            background: #218838;
+        .download-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .alert {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #8b5cf6;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .preview-section {
+                position: static;
+            }
         }
         
         @media (max-width: 768px) {
-            .quote-creator {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .controls-grid {
                 grid-template-columns: 1fr;
             }
             
-            .color-controls, .size-controls {
-                grid-template-columns: 1fr;
+            .styles-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
             }
             
-            .style-options {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            .download-actions {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-btn">← Retour à l'accueil</a>
-        
-        <div class="header">
-            <h1>💭 Générateur de Citations</h1>
-            <p>Créez de belles citations inspirantes</p>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Akiras.xyz</a>
+            <a href="/" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Retour à l'accueil
+            </a>
         </div>
-        
-        <div class="quote-creator">
-            <div class="controls-section">
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="bi bi-chat-quote"></i>
+                Générateur de Citations
+            </h1>
+            <p>Créez de magnifiques citations inspirantes</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="bi bi-gear"></i>
+                    Configuration
+                </h2>
+
                 <div class="form-group">
-                    <label for="quoteText">Citation :</label>
-                    <textarea id="quoteText" placeholder="Entrez votre citation ici..."></textarea>
-                    <button class="random-btn" onclick="generateRandomQuote()">Citation aléatoire</button>
+                    <div class="input-group">
+                        <div style="flex: 1;">
+                            <label for="quoteText" class="form-label">
+                                <i class="bi bi-quote"></i>
+                                Citation
+                            </label>
+                            <textarea id="quoteText" class="form-control" placeholder="Entrez votre citation inspirante..."></textarea>
+                        </div>
+                        <button class="btn btn-secondary" onclick="generateRandomQuote()">
+                            <i class="bi bi-shuffle"></i>
+                            Aléatoire
+                        </button>
+                    </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="authorText">Auteur :</label>
-                    <input type="text" id="authorText" placeholder="Nom de l'auteur">
+                    <label for="authorText" class="form-label">
+                        <i class="bi bi-person"></i>
+                        Auteur
+                    </label>
+                    <input type="text" id="authorText" class="form-control" placeholder="Nom de l'auteur">
                 </div>
-                
+
                 <div class="form-group">
-                    <label>Style d'arrière-plan :</label>
-                    <div class="style-options">
-                        <div class="style-option selected" onclick="selectStyle(this, 'gradient1')">
-                            <div style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4); width: 100%; height: 30px; border-radius: 4px; margin-bottom: 5px;"></div>
-                            Corail
+                    <label class="form-label">
+                        <i class="bi bi-palette"></i>
+                        Style d'arrière-plan
+                    </label>
+                    <div class="styles-grid">
+                        <div class="style-card selected" onclick="selectStyle(this, 'gradient1')">
+                            <div class="style-preview" style="background: linear-gradient(45deg, #ff6b6b, #4ecdc4);"></div>
+                            <div class="style-name">Corail</div>
                         </div>
-                        <div class="style-option" onclick="selectStyle(this, 'gradient2')">
-                            <div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 100%; height: 30px; border-radius: 4px; margin-bottom: 5px;"></div>
-                            Violet
+                        <div class="style-card" onclick="selectStyle(this, 'gradient2')">
+                            <div class="style-preview" style="background: linear-gradient(45deg, #667eea, #764ba2);"></div>
+                            <div class="style-name">Violet</div>
                         </div>
-                        <div class="style-option" onclick="selectStyle(this, 'gradient3')">
-                            <div style="background: linear-gradient(45deg, #f093fb, #f5576c); width: 100%; height: 30px; border-radius: 4px; margin-bottom: 5px;"></div>
-                            Rose
+                        <div class="style-card" onclick="selectStyle(this, 'gradient3')">
+                            <div class="style-preview" style="background: linear-gradient(45deg, #f093fb, #f5576c);"></div>
+                            <div class="style-name">Rose</div>
                         </div>
-                        <div class="style-option" onclick="selectStyle(this, 'gradient4')">
-                            <div style="background: linear-gradient(45deg, #4facfe, #00f2fe); width: 100%; height: 30px; border-radius: 4px; margin-bottom: 5px;"></div>
-                            Bleu
+                        <div class="style-card" onclick="selectStyle(this, 'gradient4')">
+                            <div class="style-preview" style="background: linear-gradient(45deg, #4facfe, #00f2fe);"></div>
+                            <div class="style-name">Bleu</div>
                         </div>
-                        <div class="style-option" onclick="selectStyle(this, 'solid')">
-                            <div style="background: #2c3e50; width: 100%; height: 30px; border-radius: 4px; margin-bottom: 5px;"></div>
-                            Uni
+                        <div class="style-card" onclick="selectStyle(this, 'gradient5')">
+                            <div class="style-preview" style="background: linear-gradient(45deg, #43e97b, #38f9d7);"></div>
+                            <div class="style-name">Vert</div>
+                        </div>
+                        <div class="style-card" onclick="selectStyle(this, 'solid')">
+                            <div class="style-preview" style="background: #2c3e50;"></div>
+                            <div class="style-name">Uni</div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="color-controls">
-                    <div class="form-group">
-                        <label for="textColor">Couleur du texte :</label>
-                        <input type="color" id="textColor" value="#ffffff" class="color-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="bgColor">Couleur personnalisée :</label>
-                        <input type="color" id="bgColor" value="#2c3e50" class="color-input">
-                    </div>
+
+                <div class="alert">
+                    <i class="bi bi-lightbulb"></i>
+                    Utilisez des citations courtes pour un meilleur rendu visuel
                 </div>
-                
-                <div class="size-controls">
+
+                <div class="controls-grid">
                     <div class="form-group">
-                        <label for="fontSize">Taille du texte :</label>
-                        <select id="fontSize">
+                        <label for="textColor" class="form-label">Couleur du texte</label>
+                        <input type="color" id="textColor" value="#ffffff" class="form-control color-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="bgColor" class="form-label">Couleur personnalisée</label>
+                        <input type="color" id="bgColor" value="#2c3e50" class="form-control color-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="fontSize" class="form-label">Taille du texte</label>
+                        <select id="fontSize" class="form-control">
                             <option value="24">Petit</option>
                             <option value="32" selected>Moyen</option>
                             <option value="40">Grand</option>
@@ -295,40 +505,57 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="fontFamily">Police :</label>
-                        <select id="fontFamily">
-                            <option value="Georgia">Georgia</option>
+                        <label for="fontFamily" class="form-label">Police</label>
+                        <select id="fontFamily" class="form-control">
+                            <option value="Georgia" selected>Georgia</option>
                             <option value="Times New Roman">Times New Roman</option>
+                            <option value="Playfair Display">Playfair Display</option>
                             <option value="Arial">Arial</option>
                             <option value="Helvetica">Helvetica</option>
-                            <option value="Playfair Display">Playfair Display</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="canvasSize">Taille de l'image :</label>
-                    <select id="canvasSize">
-                        <option value="600x400">600x400 (Paysage)</option>
-                        <option value="400x600">400x600 (Portrait)</option>
-                        <option value="600x600" selected>600x600 (Carré)</option>
-                        <option value="800x400">800x400 (Bannière)</option>
+                    <label for="canvasSize" class="form-label">Format de l'image</label>
+                    <select id="canvasSize" class="form-control">
+                        <option value="600x400">Paysage (600x400)</option>
+                        <option value="400x600">Portrait (400x600)</option>
+                        <option value="600x600" selected>Carré (600x600)</option>
+                        <option value="800x400">Bannière (800x400)</option>
+                        <option value="1200x630">Facebook/Twitter (1200x630)</option>
                     </select>
                 </div>
-                
-                <button class="generate-btn" onclick="generateQuote()">Créer la Citation</button>
+
+                <button class="btn btn-primary" onclick="generateQuote()">
+                    <i class="bi bi-magic"></i>
+                    Créer la Citation
+                </button>
             </div>
-            
+
             <div class="preview-section">
-                <h3>Aperçu :</h3>
-                <canvas id="quoteCanvas" width="600" height="600"></canvas>
-                <div>
-                    <button class="download-btn" onclick="downloadQuote()">Télécharger</button>
+                <h2 class="section-title">
+                    <i class="bi bi-eye"></i>
+                    Aperçu
+                </h2>
+
+                <div class="quote-preview" id="quotePreview">
+                    <div class="quote-placeholder">
+                        <i class="bi bi-chat-quote"></i>
+                        <span>Votre citation apparaîtra ici</span>
+                    </div>
+                </div>
+
+                <div id="downloadActions" class="download-actions" style="display: none;">
+                    <button class="btn btn-success" onclick="downloadQuote()">
+                        <i class="bi bi-download"></i>
+                        Télécharger
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         let selectedStyle = 'gradient1';
         
@@ -342,18 +569,21 @@
             { text: "Ne jugez pas chaque jour à la récolte que vous obtenez, mais aux graines que vous plantez.", author: "Robert Louis Stevenson" },
             { text: "Le bonheur n'est pas quelque chose de tout fait. Il vient de vos propres actions.", author: "Dalaï Lama" },
             { text: "La meilleure façon de prédire l'avenir est de le créer.", author: "Peter Drucker" },
-            { text: "Croyez que vous pouvez le faire et vous êtes à mi-chemin.", author: "Theodore Roosevelt" }
+            { text: "Croyez que vous pouvez le faire et vous êtes à mi-chemin.", author: "Theodore Roosevelt" },
+            { text: "Il n'y a qu'une façon d'éviter les critiques : ne rien faire, ne rien dire et n'être rien.", author: "Aristote" },
+            { text: "Le pessimiste voit la difficulté dans chaque opportunité. L'optimiste voit l'opportunité dans chaque difficulté.", author: "Winston Churchill" }
         ];
         
         const gradients = {
-            gradient1: ['#ff6b6b', '#4ecdc4'],
-            gradient2: ['#667eea', '#764ba2'],
-            gradient3: ['#f093fb', '#f5576c'],
-            gradient4: ['#4facfe', '#00f2fe']
+            gradient1: { colors: ['#ff6b6b', '#4ecdc4'], angle: 45 },
+            gradient2: { colors: ['#667eea', '#764ba2'], angle: 45 },
+            gradient3: { colors: ['#f093fb', '#f5576c'], angle: 45 },
+            gradient4: { colors: ['#4facfe', '#00f2fe'], angle: 45 },
+            gradient5: { colors: ['#43e97b', '#38f9d7'], angle: 45 }
         };
         
         function selectStyle(element, style) {
-            document.querySelectorAll('.style-option').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('.style-card').forEach(card => card.classList.remove('selected'));
             element.classList.add('selected');
             selectedStyle = style;
         }
@@ -365,27 +595,31 @@
         }
         
         function generateQuote() {
-            const canvas = document.getElementById('quoteCanvas');
+            const canvas = document.getElementById('quoteCanvas') || document.createElement('canvas');
+            if (!document.getElementById('quoteCanvas')) {
+                canvas.id = 'quoteCanvas';
+                document.getElementById('quotePreview').innerHTML = '';
+                document.getElementById('quotePreview').appendChild(canvas);
+            }
+            
             const ctx = canvas.getContext('2d');
             
-            // Configuration de la taille
             const size = document.getElementById('canvasSize').value.split('x');
             canvas.width = parseInt(size[0]);
             canvas.height = parseInt(size[1]);
             
-            // Arrière-plan
+            // Background
             if (selectedStyle === 'solid') {
                 ctx.fillStyle = document.getElementById('bgColor').value;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             } else if (gradients[selectedStyle]) {
                 const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                gradient.addColorStop(0, gradients[selectedStyle][0]);
-                gradient.addColorStop(1, gradients[selectedStyle][1]);
+                gradient.addColorStop(0, gradients[selectedStyle].colors[0]);
+                gradient.addColorStop(1, gradients[selectedStyle].colors[1]);
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
             
-            // Configuration du texte
             const fontSize = parseInt(document.getElementById('fontSize').value);
             const fontFamily = document.getElementById('fontFamily').value;
             const textColor = document.getElementById('textColor').value;
@@ -395,31 +629,34 @@
             ctx.fillStyle = textColor;
             ctx.textAlign = 'center';
             
-            // Dessiner les guillemets
+            // Quote marks
             ctx.font = `${fontSize * 2}px ${fontFamily}`;
-            ctx.fillText('"', canvas.width / 2, fontSize * 2);
+            ctx.fillText('"', canvas.width / 2, fontSize * 2.5);
             
-            // Dessiner la citation
+            // Quote text
             ctx.font = `${fontSize}px ${fontFamily}`;
             const maxWidth = canvas.width - 100;
             const lines = wrapText(ctx, quoteText, maxWidth);
             
-            const startY = (canvas.height - (lines.length * fontSize * 1.2) - 60) / 2 + fontSize * 2;
+            const totalTextHeight = lines.length * fontSize * 1.3;
+            const startY = (canvas.height - totalTextHeight) / 2 + fontSize;
             
             lines.forEach((line, index) => {
-                ctx.fillText(line, canvas.width / 2, startY + (index * fontSize * 1.2));
+                ctx.fillText(line, canvas.width / 2, startY + (index * fontSize * 1.3));
             });
             
-            // Dessiner les guillemets de fin
-            const lastLineY = startY + ((lines.length - 1) * fontSize * 1.2);
+            // Closing quote
+            const lastLineY = startY + ((lines.length - 1) * fontSize * 1.3);
             ctx.font = `${fontSize * 2}px ${fontFamily}`;
-            ctx.fillText('"', canvas.width / 2, lastLineY + fontSize * 1.5);
+            ctx.fillText('"', canvas.width / 2, lastLineY + fontSize * 1.8);
             
-            // Dessiner l'auteur
+            // Author
             if (authorText) {
-                ctx.font = `italic ${fontSize * 0.8}px ${fontFamily}`;
+                ctx.font = `italic ${fontSize * 0.7}px ${fontFamily}`;
                 ctx.fillText(`— ${authorText}`, canvas.width / 2, lastLineY + fontSize * 3);
             }
+            
+            document.getElementById('downloadActions').style.display = 'flex';
         }
         
         function wrapText(ctx, text, maxWidth) {
@@ -443,13 +680,28 @@
         
         function downloadQuote() {
             const canvas = document.getElementById('quoteCanvas');
+            if (!canvas) {
+                alert('Veuillez d\'abord créer une citation');
+                return;
+            }
+            
             const link = document.createElement('a');
             link.download = 'citation.png';
             link.href = canvas.toDataURL();
             link.click();
         }
         
-        // Générer une citation par défaut au chargement
+        // Auto-generate when text changes
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('#quoteText, #authorText')) {
+                const quoteText = document.getElementById('quoteText').value;
+                if (quoteText.trim()) {
+                    generateQuote();
+                }
+            }
+        });
+        
+        // Initialize with random quote
         window.onload = function() {
             generateRandomQuote();
             generateQuote();
