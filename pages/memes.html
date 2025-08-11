@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Memes - Akiras.xyz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .meme-creator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .controls-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .preview-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .image-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .template-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .template-img.selected {
+            border-color: #667eea;
+        }
+        
+        .file-input {
+            margin-top: 10px;
+        }
+        
+        .text-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .color-input {
+            width: 60px !important;
+            height: 40px;
+            padding: 2px;
+            border-radius: 8px;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        #memeCanvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        @media (max-width: 768px) {
+            .meme-creator {
+                grid-template-columns: 1fr;
+            }
+            
+            .text-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">← Retour à l'accueil</a>
+        
+        <div class="header">
+            <h1>😂 Générateur de Memes</h1>
+            <p>Créez des memes hilarants en quelques clics</p>
+        </div>
+        
+        <div class="meme-creator">
+            <div class="controls-section">
+                <div class="form-group">
+                    <label>Choisir une image :</label>
+                    <div class="image-options">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EDrake%3C/text%3E%3C/svg%3E" alt="Drake Meme" class="template-img" onclick="selectTemplate(this, 'drake')">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EDistracted%3C/text%3E%3C/svg%3E" alt="Distracted Boyfriend" class="template-img" onclick="selectTemplate(this, 'distracted')">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='80' viewBox='0 0 100 80'%3E%3Crect width='100' height='80' fill='%23ddd'/%3E%3Ctext x='50' y='40' text-anchor='middle' dominant-baseline='middle' fill='%23999'%3EWoman%3C/text%3E%3C/svg%3E" alt="Woman Yelling at Cat" class="template-img" onclick="selectTemplate(this, 'woman')">
+                    </div>
+                    <input type="file" id="imageUpload" accept="image/*" class="file-input" onchange="loadCustomImage(event)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="topText">Texte du haut :</label>
+                    <textarea id="topText" placeholder="Entrez votre texte ici..." rows="2"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bottomText">Texte du bas :</label>
+                    <textarea id="bottomText" placeholder="Entrez votre texte ici..." rows="2"></textarea>
+                </div>
+                
+                <div class="text-controls">
+                    <div class="form-group">
+                        <label for="fontSize">Taille du texte :</label>
+                        <select id="fontSize">
+                            <option value="30">Petit</option>
+                            <option value="40" selected>Moyen</option>
+                            <option value="50">Grand</option>
+                            <option value="60">Très grand</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="textColor">Couleur du texte :</label>
+                        <input type="color" id="textColor" value="#ffffff" class="color-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="outlineColor">Contour du texte :</label>
+                        <input type="color" id="outlineColor" value="#000000" class="color-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="fontFamily">Police :</label>
+                        <select id="fontFamily">
+                            <option value="Impact">Impact</option>
+                            <option value="Arial Black">Arial Black</option>
+                            <option value="Comic Sans MS">Comic Sans MS</option>
+                            <option value="Helvetica">Helvetica</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="generate-btn" onclick="generateMeme()">Créer le Meme</button>
+            </div>
+            
+            <div class="preview-section">
+                <h3>Aperçu :</h3>
+                <canvas id="memeCanvas" width="500" height="500"></canvas>
+                <div>
+                    <button class="download-btn" onclick="downloadMeme()">Télécharger</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentImage = null;
+        let selectedTemplate = null;
+        
+        // Templates prédéfinis (URLs d'exemple - vous pouvez les remplacer par de vraies images)
+        const templates = {
+            drake: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500"%3E%3Crect width="500" height="250" fill="%23f0f0f0"/%3E%3Crect y="250" width="500" height="250" fill="%23e0e0e0"/%3E%3Ctext x="250" y="125" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23666"%3EDrake Template - Zone 1%3C/text%3E%3Ctext x="250" y="375" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23666"%3EDrake Template - Zone 2%3C/text%3E%3C/svg%3E',
+            distracted: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23d0d0d0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="24" fill="%23555"%3EDistracted Boyfriend Template%3C/text%3E%3C/svg%3E',
+            woman: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="500" height="400" viewBox="0 0 500 400"%3E%3Crect width="500" height="400" fill="%23c0c0c0"/%3E%3Ctext x="250" y="200" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="20" fill="%23444"%3EWoman Yelling at Cat Template%3C/text%3E%3C/svg%3E'
+        };
+        
+        function selectTemplate(img, templateName) {
+            // Supprimer la sélection précédente
+            document.querySelectorAll('.template-img').forEach(el => el.classList.remove('selected'));
+            
+            // Sélectionner le nouveau template
+            img.classList.add('selected');
+            selectedTemplate = templateName;
+            
+            // Charger l'image
+            const image = new Image();
+            image.crossOrigin = 'anonymous';
+            image.onload = function() {
+                currentImage = image;
+                generateMeme();
+            };
+            image.src = templates[templateName];
+        }
+        
+        function loadCustomImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Désélectionner les templates
+                document.querySelectorAll('.template-img').forEach(el => el.classList.remove('selected'));
+                selectedTemplate = null;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const image = new Image();
+                    image.onload = function() {
+                        currentImage = image;
+                        generateMeme();
+                    };
+                    image.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function generateMeme() {
+            if (!currentImage) {
+                alert('Veuillez sélectionner une image');
+                return;
+            }
+            
+            const canvas = document.getElementById('memeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Ajuster la taille du canvas à l'image
+            const maxWidth = 500;
+            const maxHeight = 500;
+            let { width, height } = currentImage;
+            
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+            if (height > maxHeight) {
+                width = (width * maxHeight) / height;
+                height = maxHeight;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Dessiner l'image
+            ctx.drawImage(currentImage, 0, 0, width, height);
+            
+            // Configuration du texte
+            const fontSize = parseInt(document.getElementById('fontSize').value);
+            const textColor = document.getElementById('textColor').value;
+            const outlineColor = document.getElementById('outlineColor').value;
+            const fontFamily = document.getElementById('fontFamily').value;
+            
+            ctx.font = `bold ${fontSize}px ${fontFamily}`;
+            ctx.fillStyle = textColor;
+            ctx.strokeStyle = outlineColor;
+            ctx.lineWidth = 3;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            
+            // Dessiner le texte du haut
+            const topText = document.getElementById('topText').value.toUpperCase();
+            if (topText) {
+                drawTextWithWrap(ctx, topText, width / 2, 10, width - 20, fontSize);
+            }
+            
+            // Dessiner le texte du bas
+            const bottomText = document.getElementById('bottomText').value.toUpperCase();
+            if (bottomText) {
+                ctx.textBaseline = 'bottom';
+                const bottomY = height - 10;
+                drawTextWithWrap(ctx, bottomText, width / 2, bottomY, width - 20, fontSize, true);
+            }
+        }
+        
+        function drawTextWithWrap(ctx, text, x, y, maxWidth, lineHeight, fromBottom = false) {
+            const words = text.split(' ');
+            let line = '';
+            const lines = [];
+            
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = ctx.measureText(testLine);
+                const testWidth = metrics.width;
+                
+                if (testWidth > maxWidth && n > 0) {
+                    lines.push(line);
+                    line = words[n] + ' ';
+                } else {
+                    line = testLine;
+                }
+            }
+            lines.push(line);
+            
+            if (fromBottom) {
+                y = y - (lines.length - 1) * lineHeight;
+            }
+            
+            lines.forEach((line, index) => {
+                const yPos = y + (index * lineHeight);
+                ctx.strokeText(line, x, yPos);
+                ctx.fillText(line, x, yPos);
+            });
+        }
+        
+        function downloadMeme() {
+            const canvas = document.getElementById('memeCanvas');
+            const link = document.createElement('a');
+            link.download = 'meme.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Charger le premier template par défaut
+        window.onload = function() {
+            const firstTemplate = document.querySelector('.template-img');
+            selectTemplate(firstTemplate, 'drake');
+        };
+    </script>
+</body>
+</html>
