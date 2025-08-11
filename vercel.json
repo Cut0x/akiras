@@ -1,24 +1,35 @@
 {
-  "name": "akiras-meme-creator",
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "index.html",
-      "use": "@vercel/static"
+      "source": "/qrcode",
+      "destination": "/pages/qrcode.html"
+    },
+    {
+      "source": "/memes",
+      "destination": "/pages/memes.html"
+    },
+    {
+      "source": "/citations",
+      "destination": "/pages/citations.html"
     }
   ],
-  "routes": [
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
-  ],
-  "env": {
-    "TENOR_API_KEY": "@tenor-api-key"
-  },
-  "functions": {
-    "api/tenor.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }
