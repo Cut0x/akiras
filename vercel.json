@@ -1,0 +1,24 @@
+{
+  "name": "akiras-meme-creator",
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "TENOR_API_KEY": "@tenor-api-key"
+  },
+  "functions": {
+    "api/tenor.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
